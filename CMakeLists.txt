@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 4.0)
 project(flight-sim)
 
-add_executable(flight-sim src/main.cpp)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_executable(flight-sim 
+    src/main.cpp
+    src/Drone.cpp
+    )
+
+target_include_directories(flight-sim PRIVATE include)
