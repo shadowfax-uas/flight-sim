@@ -7,4 +7,4 @@ struct Waypoint {
     double altitude;
 };
 
-#endif // WAYPOINT_HPP
+#endif
