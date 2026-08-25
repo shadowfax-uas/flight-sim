@@ -1,7 +1,9 @@
 #include "Drone.hpp"
 #include <iostream>
+#include <cmath>
+#include <algorithm>
 
-Drone::Drone() : x(0), y(0), altitude(0), batteryLevel(100), state(DroneState::Grounded) {}
+Drone::Drone() : x(0), y(0), altitude(0), speed(10), batteryLevel(100), batteryConsumptionRate(0.05), state(DroneState::Grounded) {}
 
 void Drone::arm() {
     if (state == DroneState::Grounded) {
@@ -37,12 +39,43 @@ void Drone::flyTo(const Waypoint& waypoint) {
         std::cout << "Drone must be flying to navigate to a waypoint." << std::endl;
         return;
     }
+
+    double deltaX = waypoint.x - x;
+    double deltaY = waypoint.y - y;
+    double deltaAltitude = waypoint.altitude - altitude;
+
+    double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY + deltaAltitude * deltaAltitude);
+
+    if (distance == 0) {
+        std::cout << "Drone is already at the waypoint." << std::endl;
+        return;
+    }
+
+    if (batteryLevel <= 0) {
+        std::cout << "Battery depleted. Drone cannot fly." << std::endl;
+        return;
+    }
+
+    int steps = static_cast<int>(std::ceil(distance / speed));
+
+    double stepX = deltaX / steps;
+    double stepY = deltaY / steps;
+    double stepAltitude = deltaAltitude / steps;
+    double stepDistance = distance / steps;
+
+    for (int i = 0; i < steps; ++i) {
+        x += stepX;
+        y += stepY;
+        altitude += stepAltitude;
+        batteryLevel = std::max(0.0, batteryLevel - stepDistance * batteryConsumptionRate);
+        printStatus();
+    }
+
     x = waypoint.x;
     y = waypoint.y;
     altitude = waypoint.altitude;
-    batteryLevel -= 5;
-    std::cout << "Flying to waypoint: (" << waypoint.x << ", " << waypoint.y << ", " << waypoint.altitude << ")" << std::endl;
 
+    std::cout << "Flying to waypoint: (" << waypoint.x << ", " << waypoint.y << ", " << waypoint.altitude << ")" << std::endl;
 }
 
 void Drone::printStatus() const {

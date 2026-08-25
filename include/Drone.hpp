@@ -13,7 +13,9 @@ private:
     double x;
     double y;
     double altitude;
+    double speed;
     double batteryLevel;
+    double batteryConsumptionRate;
     DroneState state;
 public:
     Drone();
