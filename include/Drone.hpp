@@ -19,6 +19,12 @@ private:
     DroneState state;
 public:
     Drone();
+    double getX() const { return x; }
+    double getY() const { return y; }
+    double getAltitude() const { return altitude; }
+    double getSpeed() const { return speed; }
+    double getBatteryLevel() const { return batteryLevel; }
+    DroneState getState() const { return state; }
     void arm();
     void takeOff();
     void land();
