@@ -9,6 +9,8 @@ add_executable(flight-sim
     src/Drone.cpp
     src/Mission.cpp
     src/GPS.cpp
+    src/IMU.cpp
+    src/Radar.cpp
     )
 
 target_include_directories(flight-sim PRIVATE include)

@@ -2,13 +2,21 @@
 #include "Waypoint.hpp"
 #include "Mission.hpp"
 #include "GPS.hpp"
+#include "IMU.hpp"
+#include "Radar.hpp"
+#include "Sensor.hpp"
+
+#include <memory>
+#include <vector>
 
 int main() {
     Drone drone;
     Mission mission;
-    GPS gps;
+    std::vector<std::unique_ptr<Sensor>> sensors;
 
-    Sensor& sensor = gps; // Using GPS as a Sensor
+    sensors.push_back(std::make_unique<GPS>());
+    sensors.push_back(std::make_unique<IMU>());
+    sensors.push_back(std::make_unique<Radar>());
 
     Waypoint waypoint1{10.0, 20.0, 30.0};
     Waypoint waypoint2{15.0, 25.0, 35.0};
@@ -19,25 +27,29 @@ int main() {
     mission.addWaypoint(waypoint3);
 
     drone.arm();
-    drone.printStatus();
-
     drone.takeOff();
     drone.printStatus();
 
-    sensor.update(drone);
-    sensor.printReading();
+    for (const auto& sensor : sensors) {
+        sensor->update(drone);
+        sensor->printReading();
+    }
 
     mission.execute(drone);
     drone.printStatus();
 
-    sensor.update(drone);
-    sensor.printReading();
+    for (const auto& sensor : sensors) {
+        sensor->update(drone);
+        sensor->printReading();
+    }
     
     drone.land();
     drone.printStatus();
 
-    sensor.update(drone);
-    sensor.printReading();
+    for (const auto& sensor : sensors) {
+        sensor->update(drone);
+        sensor->printReading();
+    }
 
     return 0;
 }
