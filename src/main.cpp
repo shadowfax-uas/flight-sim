@@ -15,10 +15,10 @@
 
 int main() {
     auto timestamp = std::chrono::system_clock::now();
-    std::time_t readableTime = std::chrono::system_clock::to_time_t(timestamp);
+    std::time_t epochTime = std::chrono::system_clock::to_time_t(timestamp);
     std::filesystem::create_directories("logs");
     Drone drone;
-    TelemetryRecorder telemetryRecorder(std::format("logs/flight_{}.csv", readableTime));
+    TelemetryRecorder telemetryRecorder(std::format("logs/flight_{}.csv", epochTime));
     Mission mission;
     SensorManager sensorManager;
 
@@ -49,7 +49,6 @@ int main() {
     drone.printStatus();
 
     sensorManager.updateAll(drone);
-    telemetryRecorder.record(drone);
     sensorManager.printAll();
 
     mission.execute(drone);
@@ -57,7 +56,6 @@ int main() {
     drone.printStatus();
 
     sensorManager.updateAll(drone);
-    telemetryRecorder.record(drone);
     sensorManager.printAll();
     
     drone.land();
@@ -65,7 +63,6 @@ int main() {
     drone.printStatus();
 
     sensorManager.updateAll(drone);
-    telemetryRecorder.record(drone);
     sensorManager.printAll();
 
     return 0;
