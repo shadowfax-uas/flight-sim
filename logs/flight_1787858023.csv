@@ -1,0 +1,9 @@
+frame,x,y,altitude,battery,state
+0,0,0,0,100,Grounded
+1,0,0,0,100,Armed
+2,0,0,10,100,Flying
+3,0,0,10,100,Flying
+4,20,30,40,97.634,Flying
+5,20,30,40,97.634,Flying
+6,20,30,0,97.634,Grounded
+7,20,30,0,97.634,Grounded

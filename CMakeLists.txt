@@ -12,6 +12,7 @@ add_executable(flight-sim
     src/IMU.cpp
     src/Radar.cpp
     src/SensorManager.cpp
+    src/TelemetryRecorder.cpp
     )
 
 target_include_directories(flight-sim PRIVATE include)
