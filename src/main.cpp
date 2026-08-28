@@ -6,6 +6,7 @@
 #include "Radar.hpp"
 #include "SensorManager.hpp"
 #include "TelemetryRecorder.hpp"
+#include "TelemetryReplay.hpp"
 
 #include <memory>
 #include <chrono>
@@ -16,9 +17,13 @@
 int main() {
     auto timestamp = std::chrono::system_clock::now();
     std::time_t epochTime = std::chrono::system_clock::to_time_t(timestamp);
+
     std::filesystem::create_directories("logs");
+
+    std::string logFilename = std::format("logs/flight_{}.csv", epochTime);
+
     Drone drone;
-    TelemetryRecorder telemetryRecorder(std::format("logs/flight_{}.csv", epochTime));
+    TelemetryRecorder telemetryRecorder(logFilename);
     Mission mission;
     SensorManager sensorManager;
 

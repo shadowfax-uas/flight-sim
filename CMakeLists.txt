@@ -13,6 +13,7 @@ add_executable(flight-sim
     src/Radar.cpp
     src/SensorManager.cpp
     src/TelemetryRecorder.cpp
+    src/TelemetryReplay.cpp
     )
 
 target_include_directories(flight-sim PRIVATE include)
