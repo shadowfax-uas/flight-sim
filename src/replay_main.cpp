@@ -35,4 +35,5 @@ int main(int argc, char* argv[]) {
                   << record.y << ", "
                   << record.altitude << "\n";
     }
+    return 0;
 }

@@ -12,6 +12,8 @@
 #include <format>
 #include <filesystem>
 #include <iostream>
+#include <ctime>
+#include <string>
 
 int main() {
     auto timestamp = std::chrono::system_clock::now();
