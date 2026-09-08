@@ -5,8 +5,7 @@
 #include "IMU.hpp"
 #include "Radar.hpp"
 #include "SensorManager.hpp"
-#include "TelemetryRecorder.hpp"
-#include "FlightSession.hpp"
+#include "FlightRecorder.hpp"
 
 #include <memory>
 #include <chrono>
@@ -30,16 +29,17 @@ int main() {
     Mission mission;
     SensorManager sensorManager;
 
-    FlightSession flightSession(
+    FlightRecorder flightRecorder(
         sessionId,
         "sim-drone-01",
         FlightSource::Simulator,
-        epochTime
+        epochTime,
+        logFilename
     );
 
-    TelemetryRecorder telemetryRecorder(logFilename);
+    const FlightSession& flightSession = flightRecorder.getSession();
 
-    if (!telemetryRecorder.isOpen()) {
+    if (!flightRecorder.isOpen()) {
         std::cerr << "Failed to open telemetry file for writing.\n";
         return 1;
     }
@@ -63,27 +63,27 @@ int main() {
     mission.addWaypoint(waypoint2);
     mission.addWaypoint(waypoint3);
 
-    telemetryRecorder.record(drone);
+    flightRecorder.record(drone);
 
     drone.arm();
-    telemetryRecorder.record(drone);
+    flightRecorder.record(drone);
 
     drone.takeOff();
-    telemetryRecorder.record(drone);
+    flightRecorder.record(drone);
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
 
     mission.execute(drone);
-    telemetryRecorder.record(drone);
+    flightRecorder.record(drone);
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
     
     drone.land();
-    telemetryRecorder.record(drone);
+    flightRecorder.record(drone);
     drone.printStatus();
 
     sensorManager.updateAll(drone);
@@ -94,7 +94,7 @@ int main() {
             std::chrono::system_clock::now()
         );
 
-    flightSession.endSession(flightEndTime);
+    flightRecorder.endSession(flightEndTime);
 
     // Sanity check for functionality
     if (!flightSession.isComplete()) {
@@ -122,6 +122,10 @@ int main() {
                 << flightSession.getEndTime().value()
                 << "\n";
     }
+
+    std::cout << "Telemetry records stored: "
+            << flightSession.getTelemetryRecords().size()
+            << "\n";
 
     return 0;
 }

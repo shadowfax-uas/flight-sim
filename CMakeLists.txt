@@ -14,6 +14,7 @@ add_library(flight-core
     src/TelemetryRecorder.cpp
     src/TelemetryReplay.cpp
     src/FlightSession.cpp
+    src/FlightRecorder.cpp
     )
 
 target_include_directories(flight-core PUBLIC include)
