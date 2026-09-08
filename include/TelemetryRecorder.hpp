@@ -9,7 +9,6 @@
 class TelemetryRecorder {
     private:
         std::ofstream outputFile;
-        std::size_t nextFrameNumber;
 
         std::string stateToString(DroneState state) const;
 
@@ -17,7 +16,7 @@ class TelemetryRecorder {
         explicit TelemetryRecorder(const std::string& filename);
 
         bool isOpen() const;
-        void record(const Drone& drone);
+        void record(const TelemetryRecord& record);
 };
 
 #endif

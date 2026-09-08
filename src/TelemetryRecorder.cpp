@@ -3,8 +3,7 @@
 #include <iostream>
 
 TelemetryRecorder::TelemetryRecorder(const std::string& filename)
-    : outputFile(filename), 
-      nextFrameNumber(0) {
+    : outputFile(filename) {
     if (outputFile.is_open()) {
         outputFile << "frame,x,y,altitude,battery,state\n";
     }
@@ -23,22 +22,11 @@ std::string TelemetryRecorder::stateToString(DroneState state) const {
     }
 }
 
-void TelemetryRecorder::record(const Drone& drone) {
+void TelemetryRecorder::record(const TelemetryRecord& record) {
     if (!outputFile.is_open()) {
         std::cerr << "Telemetry file is not open.\n";
         return;
     }
-
-    TelemetryRecord record{
-        nextFrameNumber,
-        drone.getX(),
-        drone.getY(),
-        drone.getAltitude(),
-        drone.getBatteryLevel(),
-        drone.getState()
-    };
-
-    ++nextFrameNumber;
 
     outputFile
         << record.frameNumber << ","
