@@ -1,9 +1,9 @@
 #ifndef FLIGHT_RECORDER_HPP
 #define FLIGHT_RECORDER_HPP
 
-#include "Drone.hpp"
 #include "FlightSession.hpp"
 #include "TelemetryRecorder.hpp"
+#include "TelemetrySample.hpp"
 
 #include <cstddef>
 #include <ctime>
@@ -25,7 +25,7 @@ class FlightRecorder {
         );
 
         bool isOpen() const;
-        void record(const Drone& drone);
+        void record(const TelemetrySample& sample);
         void endSession(std::time_t endTime);
 
         const FlightSession& getSession() const;

@@ -6,6 +6,7 @@
 #include "Radar.hpp"
 #include "SensorManager.hpp"
 #include "FlightRecorder.hpp"
+#include "SimulatedDroneSource.hpp"
 
 #include <memory>
 #include <chrono>
@@ -26,6 +27,7 @@ int main() {
     std::string sessionId = std::format("sim-{}", epochTime);
 
     Drone drone;
+    SimulatedDroneSource telemetrySource(drone);
     Mission mission;
     SensorManager sensorManager;
 
@@ -63,27 +65,27 @@ int main() {
     mission.addWaypoint(waypoint2);
     mission.addWaypoint(waypoint3);
 
-    flightRecorder.record(drone);
+    flightRecorder.record(telemetrySource.sample());
 
     drone.arm();
-    flightRecorder.record(drone);
+    flightRecorder.record(telemetrySource.sample());
 
     drone.takeOff();
-    flightRecorder.record(drone);
+    flightRecorder.record(telemetrySource.sample());
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
 
     mission.execute(drone);
-    flightRecorder.record(drone);
+    flightRecorder.record(telemetrySource.sample());
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
     
     drone.land();
-    flightRecorder.record(drone);
+    flightRecorder.record(telemetrySource.sample());
     drone.printStatus();
 
     sensorManager.updateAll(drone);

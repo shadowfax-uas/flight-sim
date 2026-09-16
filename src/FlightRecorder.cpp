@@ -18,17 +18,18 @@ bool FlightRecorder::isOpen() const {
     return telemetryRecorder.isOpen();
 }
 
-void FlightRecorder::record(const Drone& drone) {
+void FlightRecorder::record(const TelemetrySample& sample) {
     TelemetryRecord record{
         nextFrameNumber,
-        drone.getX(),
-        drone.getY(),
-        drone.getAltitude(),
-        drone.getBatteryLevel(),
-        drone.getState()
+        sample.x,
+        sample.y,
+        sample.altitude,
+        sample.batteryLevel,
+        sample.state
     };
 
     ++nextFrameNumber;
+    
     session.addTelemetryRecord(record);
     telemetryRecorder.record(record);
 
