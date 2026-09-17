@@ -29,6 +29,7 @@ bool TelemetryReplay::load(const std::string& filename) {
         std::stringstream lineStream(line);
 
         std::string frame;
+        std::string elapsedTime;
         std::string x;
         std::string y;
         std::string altitude;
@@ -36,6 +37,7 @@ bool TelemetryReplay::load(const std::string& filename) {
         std::string state;
 
         std::getline(lineStream, frame, ',');
+        std::getline(lineStream, elapsedTime, ',');
         std::getline(lineStream, x, ',');
         std::getline(lineStream, y, ',');
         std::getline(lineStream, altitude, ',');
@@ -44,6 +46,7 @@ bool TelemetryReplay::load(const std::string& filename) {
 
         TelemetryRecord record{
             static_cast<std::size_t>(std::stoull(frame)),
+            std::stod(elapsedTime),
             std::stod(x),
             std::stod(y),
             std::stod(altitude),

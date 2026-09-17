@@ -22,15 +22,20 @@ int main(int argc, char* argv[]) {
 
     const TelemetryRecord& record = replay.current();
     std::cout << "Frame " << record.frameNumber
-              << ": "
+              << " [" 
+              << record.elapsedTimeSeconds 
+              << "s]: "
               << record.x << ", "
               << record.y << ", "
-              << record.altitude << "\n";
+              << record.altitude 
+              << "\n";
 
     while (replay.next()) {
         const TelemetryRecord& record = replay.current();
         std::cout << "Frame " << record.frameNumber
-                  << ": "
+                  << " [" 
+                  << record.elapsedTimeSeconds 
+                  << "s]: "
                   << record.x << ", "
                   << record.y << ", "
                   << record.altitude << "\n";

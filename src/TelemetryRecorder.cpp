@@ -5,7 +5,7 @@
 TelemetryRecorder::TelemetryRecorder(const std::string& filename)
     : outputFile(filename) {
     if (outputFile.is_open()) {
-        outputFile << "frame,x,y,altitude,battery,state\n";
+        outputFile << "frame,elapsedTimeSeconds,x,y,altitude,battery,state\n";
     }
 }
 
@@ -30,6 +30,7 @@ void TelemetryRecorder::record(const TelemetryRecord& record) {
 
     outputFile
         << record.frameNumber << ","
+        << record.elapsedTimeSeconds << ","
         << record.x << ","
         << record.y << ","
         << record.altitude << ","

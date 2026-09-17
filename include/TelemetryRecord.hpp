@@ -7,6 +7,7 @@
 
 struct TelemetryRecord {
     std::size_t frameNumber;
+    double elapsedTimeSeconds;
     double x;
     double y;
     double altitude;

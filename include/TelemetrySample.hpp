@@ -4,6 +4,7 @@
 #include "Drone.hpp"
 
 struct TelemetrySample {
+    double elapsedTimeSeconds;
     double x;
     double y;
     double altitude;

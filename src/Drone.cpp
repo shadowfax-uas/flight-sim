@@ -3,7 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
-Drone::Drone() : x(0), y(0), altitude(0), speed(10), batteryLevel(100), batteryConsumptionRate(0.05), state(DroneState::Grounded) {}
+// Constructor
+Drone::Drone() : simulationTimeSeconds(0.0), x(0), y(0), altitude(0), speed(10), batteryLevel(100), batteryConsumptionRate(0.05), state(DroneState::Grounded) {}
 
 void Drone::arm() {
     if (state == DroneState::Grounded) {
@@ -34,7 +35,7 @@ void Drone::land() {
     }
 }
 
-void Drone::flyTo(const Waypoint& waypoint) {
+void Drone::flyTo(const Waypoint& waypoint, const std::function<void()>& onStep) {
     if (state != DroneState::Flying) {
         std::cout << "Drone must be flying to navigate to a waypoint." << std::endl;
         return;
@@ -56,7 +57,10 @@ void Drone::flyTo(const Waypoint& waypoint) {
         return;
     }
 
-    int steps = static_cast<int>(std::ceil(distance / speed));
+    double travelTimeSeconds = distance / speed;
+
+    int steps = static_cast<int>(std::ceil(travelTimeSeconds));
+    double stepDurationSeconds = travelTimeSeconds / steps;
 
     double stepX = deltaX / steps;
     double stepY = deltaY / steps;
@@ -67,8 +71,19 @@ void Drone::flyTo(const Waypoint& waypoint) {
         x += stepX;
         y += stepY;
         altitude += stepAltitude;
-        batteryLevel = std::max(0.0, batteryLevel - stepDistance * batteryConsumptionRate);
+        batteryLevel = std::max(
+            0.0,
+            batteryLevel 
+                - stepDistance * batteryConsumptionRate
+        );
+
+        simulationTimeSeconds += stepDurationSeconds;
+
         printStatus();
+
+        if (onStep) {
+            onStep();
+        }
     }
 
     x = waypoint.x;

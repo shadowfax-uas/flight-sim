@@ -21,6 +21,7 @@ bool FlightRecorder::isOpen() const {
 void FlightRecorder::record(const TelemetrySample& sample) {
     TelemetryRecord record{
         nextFrameNumber,
+        sample.elapsedTimeSeconds,
         sample.x,
         sample.y,
         sample.altitude,
