@@ -2,14 +2,9 @@
 #define DRONE_HPP
 
 #include "Waypoint.hpp"
+#include "VehicleState.hpp"
 
 #include <functional>
-
-enum class DroneState {
-    Grounded,
-    Armed,
-    Flying
-};
 
 class Drone {
 private:
@@ -20,7 +15,7 @@ private:
     double speed;
     double batteryLevel;
     double batteryConsumptionRate;
-    DroneState state;
+    VehicleState state;
 public:
     Drone();
     double getSimulationTimeSeconds() const { return simulationTimeSeconds; }
@@ -29,7 +24,7 @@ public:
     double getAltitude() const { return altitude; }
     double getSpeed() const { return speed; }
     double getBatteryLevel() const { return batteryLevel; }
-    DroneState getState() const { return state; }
+    VehicleState getState() const { return state; }
     void arm();
     void takeOff();
     void land();

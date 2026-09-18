@@ -5,11 +5,11 @@
 
 TelemetryReplay::TelemetryReplay() : currentIndex(0) {}
 
-DroneState TelemetryReplay::stateFromString(const std::string& state) const {
-    if (state == "Grounded") return DroneState::Grounded;
-    if (state == "Armed") return DroneState::Armed;
-    if (state == "Flying") return DroneState::Flying;
-    return DroneState::Grounded;
+VehicleState TelemetryReplay::stateFromString(const std::string& state) const {
+    if (state == "Grounded") return VehicleState::Grounded;
+    if (state == "Armed") return VehicleState::Armed;
+    if (state == "Flying") return VehicleState::Flying;
+    return VehicleState::Grounded;
 }
 
 bool TelemetryReplay::load(const std::string& filename) {

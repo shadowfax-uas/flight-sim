@@ -11,7 +11,8 @@ class SimulatedDroneSource : public TelemetrySource {
     public:
         explicit SimulatedDroneSource(const Drone& drone);
 
-        TelemetrySample sample() const override;
+        TelemetrySample sample() const;
+        void publishCurrent() const;
 
     
 };

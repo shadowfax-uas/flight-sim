@@ -3,9 +3,19 @@
 
 #include "TelemetrySample.hpp"
 
+#include <functional>
+
 class TelemetrySource {
+    private:
+        std::function<void(const TelemetrySample&)> sampleHandler;
+
+    protected:
+        void publishSample(const TelemetrySample& sample) const;
+
     public:
-        virtual TelemetrySample sample() const = 0;
+        void setSampleHandler(
+            const std::function<void(const TelemetrySample&)>& handler
+        );
 
         virtual ~TelemetrySource() = default;
 };

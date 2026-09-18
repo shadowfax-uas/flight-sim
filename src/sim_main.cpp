@@ -39,12 +39,11 @@ int main() {
         logFilename
     );
 
-    auto recordTelemetry =
-        [&flightRecorder, &telemetrySource]() {
-            flightRecorder.record(
-                telemetrySource.sample()
-            );
-        };
+    telemetrySource.setSampleHandler(
+        [&flightRecorder](const TelemetrySample& sample) {
+            flightRecorder.record(sample);
+        }
+    );
 
     const FlightSession& flightSession = flightRecorder.getSession();
 
@@ -72,26 +71,28 @@ int main() {
     mission.addWaypoint(waypoint2);
     mission.addWaypoint(waypoint3);
 
-    recordTelemetry();
+    telemetrySource.publishCurrent();
 
     drone.arm();
-    recordTelemetry();
+    telemetrySource.publishCurrent();
 
     drone.takeOff();
-    recordTelemetry();
+    telemetrySource.publishCurrent();
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
 
-    mission.execute(drone, recordTelemetry);
+    mission.execute(drone, [&telemetrySource]() {
+        telemetrySource.publishCurrent();
+    });
     drone.printStatus();
 
     sensorManager.updateAll(drone);
     sensorManager.printAll();
     
     drone.land();
-    recordTelemetry();
+    telemetrySource.publishCurrent();
     drone.printStatus();
 
     sensorManager.updateAll(drone);

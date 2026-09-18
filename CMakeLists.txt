@@ -16,6 +16,7 @@ add_library(flight-core
     src/FlightSession.cpp
     src/FlightRecorder.cpp
     src/SimulatedDroneSource.cpp
+    src/TelemetrySource.cpp
     )
 
 target_include_directories(flight-core PUBLIC include)

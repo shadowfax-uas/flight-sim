@@ -13,11 +13,11 @@ bool TelemetryRecorder::isOpen() const {
     return outputFile.is_open();
 }
 
-std::string TelemetryRecorder::stateToString(DroneState state) const {
+std::string TelemetryRecorder::stateToString(VehicleState state) const {
     switch (state) {
-        case DroneState::Grounded: return "Grounded";
-        case DroneState::Armed: return "Armed";
-        case DroneState::Flying: return "Flying";
+        case VehicleState::Grounded: return "Grounded";
+        case VehicleState::Armed: return "Armed";
+        case VehicleState::Flying: return "Flying";
         default: return "Unknown";
     }
 }

@@ -12,7 +12,7 @@ class TelemetryReplay {
         std::vector<TelemetryRecord> records;
         std::size_t currentIndex;
 
-        DroneState stateFromString(const std::string& state) const;
+        VehicleState stateFromString(const std::string& state) const;
     public:
         TelemetryReplay();
 

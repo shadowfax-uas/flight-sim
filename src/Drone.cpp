@@ -4,11 +4,11 @@
 #include <algorithm>
 
 // Constructor
-Drone::Drone() : simulationTimeSeconds(0.0), x(0), y(0), altitude(0), speed(10), batteryLevel(100), batteryConsumptionRate(0.05), state(DroneState::Grounded) {}
+Drone::Drone() : simulationTimeSeconds(0.0), x(0), y(0), altitude(0), speed(10), batteryLevel(100), batteryConsumptionRate(0.05), state(VehicleState::Grounded) {}
 
 void Drone::arm() {
-    if (state == DroneState::Grounded) {
-        state = DroneState::Armed;
+    if (state == VehicleState::Grounded) {
+        state = VehicleState::Armed;
         std::cout << "Drone armed." << std::endl;
     } else {
         std::cout << "Drone cannot be armed in its current state." << std::endl;
@@ -16,8 +16,8 @@ void Drone::arm() {
 }
 
 void Drone::takeOff() {
-    if (state == DroneState::Armed) {
-        state = DroneState::Flying;
+    if (state == VehicleState::Armed) {
+        state = VehicleState::Flying;
         altitude = 10.0;
         std::cout << "Drone taking off." << std::endl;
     } else {
@@ -26,8 +26,8 @@ void Drone::takeOff() {
 }
 
 void Drone::land() {
-    if (state == DroneState::Flying) {
-        state = DroneState::Grounded;
+    if (state == VehicleState::Flying) {
+        state = VehicleState::Grounded;
         altitude = 0.0;
         std::cout << "Drone landing." << std::endl;
     } else {
@@ -36,7 +36,7 @@ void Drone::land() {
 }
 
 void Drone::flyTo(const Waypoint& waypoint, const std::function<void()>& onStep) {
-    if (state != DroneState::Flying) {
+    if (state != VehicleState::Flying) {
         std::cout << "Drone must be flying to navigate to a waypoint." << std::endl;
         return;
     }
@@ -98,13 +98,13 @@ void Drone::printStatus() const {
     std::cout << "Battery level: " << batteryLevel << "%" << std::endl;
     std::cout << "Drone state: ";
     switch (state) {
-        case DroneState::Grounded:
+        case VehicleState::Grounded:
             std::cout << "Grounded" << std::endl;
             break;
-        case DroneState::Armed:
+        case VehicleState::Armed:
             std::cout << "Armed" << std::endl;
             break;
-        case DroneState::Flying:
+        case VehicleState::Flying:
             std::cout << "Flying" << std::endl;
             break;
     }

@@ -1,7 +1,7 @@
 #ifndef TELEMETRY_RECORD_HPP
 #define TELEMETRY_RECORD_HPP
 
-#include "Drone.hpp"
+#include "VehicleState.hpp"
 
 #include <cstddef>
 
@@ -12,7 +12,7 @@ struct TelemetryRecord {
     double y;
     double altitude;
     double batteryLevel;
-    DroneState state;
+    VehicleState state;
 };
 
 #endif

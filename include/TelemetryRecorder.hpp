@@ -10,7 +10,7 @@ class TelemetryRecorder {
     private:
         std::ofstream outputFile;
 
-        std::string stateToString(DroneState state) const;
+        std::string stateToString(VehicleState state) const;
 
     public:
         explicit TelemetryRecorder(const std::string& filename);

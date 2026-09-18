@@ -1,7 +1,7 @@
 #ifndef TELEMETRY_SAMPLE_HPP
 #define TELEMETRY_SAMPLE_HPP
 
-#include "Drone.hpp"
+#include "VehicleState.hpp"
 
 struct TelemetrySample {
     double elapsedTimeSeconds;
@@ -9,7 +9,7 @@ struct TelemetrySample {
     double y;
     double altitude;
     double batteryLevel;
-    DroneState state;
+    VehicleState state;
 };
 
 #endif

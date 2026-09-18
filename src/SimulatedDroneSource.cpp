@@ -12,3 +12,7 @@ TelemetrySample SimulatedDroneSource::sample() const {
         drone.getState()
     };
 }
+
+void SimulatedDroneSource::publishCurrent() const {
+    publishSample(sample());
+}
