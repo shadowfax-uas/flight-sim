@@ -17,6 +17,7 @@ add_library(flight-core
     src/FlightRecorder.cpp
     src/SimulatedDroneSource.cpp
     src/TelemetrySource.cpp
+    src/MockTelemetrySource.cpp
     )
 
 target_include_directories(flight-core PUBLIC include)
@@ -32,3 +33,9 @@ add_executable(flight-replay
 )
 
 target_link_libraries(flight-replay PRIVATE flight-core)
+
+add_executable(flight-stream-demo
+    src/stream_main.cpp
+)
+
+target_link_libraries(flight-stream-demo PRIVATE flight-core)
