@@ -4,7 +4,11 @@
 #include <thread>
 #include <vector>
 
-void MockTelemetrySource::run() const {
+MockTelemetrySource::MockTelemetrySource() : running(false) {}
+
+void MockTelemetrySource::run(
+    std::stop_token stopToken
+) {
     std::vector<TelemetrySample> samples = {
         {0.0,  0.0,  0.0,  0.0, 100.0, VehicleState::Grounded},
         {0.5,  0.0,  0.0,  0.0, 100.0, VehicleState::Armed},
@@ -15,9 +19,19 @@ void MockTelemetrySource::run() const {
         {3.0, 15.0, 30.0,  0.0,  98.5, VehicleState::Grounded}
     };
 
-    for (const TelemetrySample& sample : samples) {
-        publishSample(sample);
+    for (std::size_t i=0; i < samples.size(); ++i) {
+        if (stopToken.stop_requested()) {
+            break;
+        }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        publishSample(samples[i]);
+
+        if (i + 1 < samples.size()) {
+            std::this_thread::sleep_for(
+                std::chrono::milliseconds(500)
+            );
+        }
     }
+
+    running.store(false);
 };

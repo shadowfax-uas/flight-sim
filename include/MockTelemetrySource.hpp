@@ -4,8 +4,20 @@
 #include "TelemetrySource.hpp"
 
 class MockTelemetrySource : public TelemetrySource {
+    private:
+        std::jthread workerThread;
+        std::atomic<bool> running;
+
+        void run(std::stop_token stopToken);
+
     public:
-        void run() const;
+        MockTelemetrySource();
+
+        void start();
+        void stop();
+        void wait();
+
+        bool isRunning() const;
 };
 
 #endif
