@@ -34,4 +34,41 @@ void MockTelemetrySource::run(
     }
 
     running.store(false);
-};
+}
+
+void MockTelemetrySource::start() {
+    if (running.load()) {
+        return;
+    }
+
+    if (workerThread.joinable()) {
+        workerThread.join();
+    }
+
+    running.store(true);
+
+    workerThread = std::jthread(
+        [this](std::stop_token stopToken) {
+            run(stopToken);
+        }
+    );
+}
+
+void MockTelemetrySource::wait() {
+    if (workerThread.joinable()) {
+        workerThread.join();
+    }
+}
+
+void MockTelemetrySource::stop() {
+    if (workerThread.joinable()) {
+        workerThread.request_stop();
+        workerThread.join();
+    }
+
+    running.store(false);
+}
+
+bool MockTelemetrySource::isRunning() const {
+    return running.load();
+}

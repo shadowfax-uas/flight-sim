@@ -7,6 +7,7 @@
 #include <format>
 #include <iostream>
 #include <string>
+#include <thread>
 
 int main() {
     auto timestamp = std::chrono::system_clock::now();
@@ -18,8 +19,6 @@ int main() {
 
     std::string sessionId = std::format("stream-{}", epochTime);
 
-    MockTelemetrySource telemetrySource;
-
     FlightRecorder flightRecorder(
         sessionId,
         "mock-vehicle-01",
@@ -28,6 +27,7 @@ int main() {
         logFilename
     );
 
+    MockTelemetrySource telemetrySource;
 
     telemetrySource.setSampleHandler(
         [&flightRecorder](const TelemetrySample& sample) {
@@ -44,7 +44,17 @@ int main() {
 
     std::cout << "Starting mock telemetry stream...\n";
 
-    telemetrySource.run();
+    telemetrySource.start();
+
+    std::cout << "Main thread is still running.\n";
+
+    while (telemetrySource.isRunning()) {
+        std::cout << "Main thread: telemetry still arriving...\n";
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(750));
+    }
+
+    telemetrySource.wait();
 
     std::cout << "Mock telemetry stream complete.\n";
 

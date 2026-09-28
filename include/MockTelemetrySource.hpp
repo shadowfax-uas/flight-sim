@@ -3,10 +3,13 @@
 
 #include "TelemetrySource.hpp"
 
+#include <atomic>
+#include <thread>
+
 class MockTelemetrySource : public TelemetrySource {
     private:
-        std::jthread workerThread;
         std::atomic<bool> running;
+        std::jthread workerThread;
 
         void run(std::stop_token stopToken);
 

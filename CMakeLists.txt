@@ -4,6 +4,8 @@ project(flight-sim)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Threads REQUIRED)
+
 add_library(flight-core 
     src/Drone.cpp
     src/Mission.cpp
@@ -21,6 +23,8 @@ add_library(flight-core
     )
 
 target_include_directories(flight-core PUBLIC include)
+
+target_link_libraries(flight-core PUBLIC Threads::Threads)
 
 add_executable(flight-sim 
     src/sim_main.cpp
