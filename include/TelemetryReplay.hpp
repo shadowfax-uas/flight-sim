@@ -6,13 +6,14 @@
 #include <cstddef>
 #include <string>
 #include <vector>
+#include <optional>
 
 class TelemetryReplay {
     private:
         std::vector<TelemetryRecord> records;
         std::size_t currentIndex;
 
-        VehicleState stateFromString(const std::string& state) const;
+        std::optional<VehicleState> stateFromString(const std::string& state) const;
     public:
         TelemetryReplay();
 
@@ -26,7 +27,6 @@ class TelemetryReplay {
         bool next();
         bool previous();
         bool seek(std::size_t index);
-
 
 };
 

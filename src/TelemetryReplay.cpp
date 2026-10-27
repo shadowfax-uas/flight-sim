@@ -5,11 +5,11 @@
 
 TelemetryReplay::TelemetryReplay() : currentIndex(0) {}
 
-VehicleState TelemetryReplay::stateFromString(const std::string& state) const {
+std::optional<VehicleState> TelemetryReplay::stateFromString(const std::string& state) const {
     if (state == "Grounded") return VehicleState::Grounded;
     if (state == "Armed") return VehicleState::Armed;
     if (state == "Flying") return VehicleState::Flying;
-    return VehicleState::Grounded;
+    return std::nullopt;
 }
 
 bool TelemetryReplay::load(const std::string& filename) {
@@ -44,6 +44,12 @@ bool TelemetryReplay::load(const std::string& filename) {
         std::getline(lineStream, battery, ',');
         std::getline(lineStream, state);
 
+        std::optional<VehicleState> vehicleState = stateFromString(state);
+        if (!vehicleState) {
+            records.clear();
+            return false;
+        }
+
         TelemetryRecord record{
             static_cast<std::size_t>(std::stoull(frame)),
             std::stod(elapsedTime),
@@ -51,7 +57,7 @@ bool TelemetryReplay::load(const std::string& filename) {
             std::stod(y),
             std::stod(altitude),
             std::stod(battery),
-            stateFromString(state)
+            vehicleState.value()
         };
         records.push_back(record);
     }
