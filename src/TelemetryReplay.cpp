@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
+#include <iostream>
 
 TelemetryReplay::TelemetryReplay() : currentIndex(0) {}
 
@@ -18,48 +20,60 @@ bool TelemetryReplay::load(const std::string& filename) {
     if (!inputFile.is_open()) {
         return false;
     }
+    
+    try {
+        records.clear();
+        currentIndex = 0;
 
-    records.clear();
-    currentIndex = 0;
+        std::string line;
+        std::getline(inputFile, line);
 
-    std::string line;
-    std::getline(inputFile, line);
+        while (std::getline(inputFile, line)) {
+            std::stringstream lineStream(line);
 
-    while (std::getline(inputFile, line)) {
-        std::stringstream lineStream(line);
+            std::string frame;
+            std::string elapsedTime;
+            std::string x;
+            std::string y;
+            std::string altitude;
+            std::string battery;
+            std::string state;
 
-        std::string frame;
-        std::string elapsedTime;
-        std::string x;
-        std::string y;
-        std::string altitude;
-        std::string battery;
-        std::string state;
+            std::getline(lineStream, frame, ',');
+            std::getline(lineStream, elapsedTime, ',');
+            std::getline(lineStream, x, ',');
+            std::getline(lineStream, y, ',');
+            std::getline(lineStream, altitude, ',');
+            std::getline(lineStream, battery, ',');
+            std::getline(lineStream, state);
 
-        std::getline(lineStream, frame, ',');
-        std::getline(lineStream, elapsedTime, ',');
-        std::getline(lineStream, x, ',');
-        std::getline(lineStream, y, ',');
-        std::getline(lineStream, altitude, ',');
-        std::getline(lineStream, battery, ',');
-        std::getline(lineStream, state);
+            std::optional<VehicleState> vehicleState = stateFromString(state);
+            if (!vehicleState) {
+                records.clear();
+                return false;
+            }
 
-        std::optional<VehicleState> vehicleState = stateFromString(state);
-        if (!vehicleState) {
-            records.clear();
-            return false;
+            TelemetryRecord record{
+                static_cast<std::size_t>(std::stoull(frame)),
+                std::stod(elapsedTime),
+                std::stod(x),
+                std::stod(y),
+                std::stod(altitude),
+                std::stod(battery),
+                vehicleState.value()
+            };
+            records.push_back(record);
         }
-
-        TelemetryRecord record{
-            static_cast<std::size_t>(std::stoull(frame)),
-            std::stod(elapsedTime),
-            std::stod(x),
-            std::stod(y),
-            std::stod(altitude),
-            std::stod(battery),
-            vehicleState.value()
-        };
-        records.push_back(record);
+    }
+    catch (const std::invalid_argument& error) {
+        std::cerr << "Invalid argument error while parsing record: " << error.what() << "\n";
+        records.clear();
+        return false;
+    }
+    catch (const std::out_of_range& error) {
+        std::cerr << "Out of range error while parsing record: " << error.what() << "\n";
+        records.clear();
+        return false;
     }
     return !records.empty();
 }

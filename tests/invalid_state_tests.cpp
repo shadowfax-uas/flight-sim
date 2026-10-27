@@ -17,6 +17,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::cout << "Invalid state rejected. Test successful.\n";
+    std::cout << "Invalid data rejected. Test successful.\n";
     return 0;
 }
