@@ -45,6 +45,18 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/valid.csv
 )
 
+add_executable(flight-invalid-state-tests
+    tests/invalid_state_tests.cpp
+)
+
+target_link_libraries(flight-invalid-state-tests PRIVATE flight-core)
+
+add_test(
+    NAME replay-invalid-state
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_state.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )
