@@ -3,6 +3,7 @@ project(flight-sim)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+enable_testing()
 
 find_package(Threads REQUIRED)
 
@@ -31,6 +32,18 @@ add_executable(flight-sim
 )
 
 target_link_libraries(flight-sim PRIVATE flight-core)
+
+add_executable(flight-tests
+    tests/replay_tests.cpp
+)
+
+target_link_libraries(flight-tests PRIVATE flight-core)
+
+add_test(
+    NAME replay-valid
+    COMMAND flight-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/valid.csv
+)
 
 add_executable(flight-replay 
     src/replay_main.cpp
