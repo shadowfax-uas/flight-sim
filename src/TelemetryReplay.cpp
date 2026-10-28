@@ -4,6 +4,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
+#include <limits>
 
 TelemetryReplay::TelemetryReplay() : currentIndex(0) {}
 
@@ -35,6 +37,39 @@ namespace {
         std::cerr << "Out of range error while parsing double from value: " << text << "\n";
         return std::nullopt;
     }
+    }
+
+    std::optional<std::size_t> parseStrictFrame(
+        const std::string& text
+    ) {
+        if (text.empty()) {
+            std::cerr << "Failed to parse frame from value: " << text << "\n";
+            return std::nullopt;
+        }
+
+        bool onlyDigits = std::all_of(
+            text.begin(),
+            text.end(),
+            [](char character) {
+                return character >= '0' && character <= '9';
+            }
+        );
+        if (!onlyDigits) {
+            std::cerr << "Failed to parse frame from value: " << text << "\n";
+            return std::nullopt;
+        }
+        try {
+            std::stoull(text);
+            return static_cast<std::size_t>(std::stoull(text));
+        }
+        catch (const std::invalid_argument& error) {
+            std::cerr << "Invalid argument error while parsing frame from value: " << text << "\n";
+            return std::nullopt;
+        }
+        catch (const std::out_of_range& error) {
+            std::cerr << "Out of range error while parsing frame from value: " << text << "\n";
+            return std::nullopt;
+        }
     }
 }
 
@@ -77,7 +112,13 @@ bool TelemetryReplay::load(const std::string& filename) {
                 return false;
             }
 
-            // Validate values were returned before using in the TelemetryRecord constructor
+            // Validate values before using in the TelemetryRecord constructor
+
+            std::optional<std::size_t> parsedFrame = parseStrictFrame(frame);
+            if (!parsedFrame) {
+                records.clear();
+                return false;
+            }
 
             std::optional<double> elapsedTimeValue = parseStrictDouble(elapsedTime);
             std::optional<double> xValue = parseStrictDouble(x);
@@ -91,7 +132,7 @@ bool TelemetryReplay::load(const std::string& filename) {
             }
             
             TelemetryRecord record{
-                static_cast<std::size_t>(std::stoull(frame)),
+                parsedFrame.value(),
                 elapsedTimeValue.value(),
                 xValue.value(),
                 yValue.value(),

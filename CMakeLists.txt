@@ -75,6 +75,18 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/partial_x.csv
 )
 
+add_test(
+    NAME replay-negative-frame
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/negative_frame.csv
+)
+
+add_test(
+    NAME replay-invalid-frame
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_frame.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

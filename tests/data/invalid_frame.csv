@@ -1,0 +1,3 @@
+frame,elapsedTimeSeconds,x,y,altitude,battery,state
+apple,0,0,0,0,100,Grounded
+4.5,0,0,0,0,100,Flying
