@@ -63,6 +63,18 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_state.csv
 )
 
+add_test(
+    NAME replay-partial-number
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/partial_number.csv
+)
+
+add_test(
+    NAME replay-partial-x
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/partial_x.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

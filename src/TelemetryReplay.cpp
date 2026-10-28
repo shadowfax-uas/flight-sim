@@ -14,13 +14,37 @@ std::optional<VehicleState> TelemetryReplay::stateFromString(const std::string& 
     return std::nullopt;
 }
 
+namespace {
+    // Validate that the entire string can be converted to a double
+    std::optional<double> parseStrictDouble(
+        const std::string& text
+    ) { try {
+            std::size_t characterConsumed = 0;
+            double value = std::stod(text, &characterConsumed);
+            if (characterConsumed != text.size()) {
+                std::cerr << "Failed to parse double from value: " << text << "\n";
+                return std::nullopt;
+            }
+            return value;
+    }
+    catch (const std::invalid_argument& error) {
+        std::cerr << "Invalid argument error while parsing double from value: " << text << "\n";
+        return std::nullopt;
+    }
+    catch (const std::out_of_range& error) {
+        std::cerr << "Out of range error while parsing double from value: " << text << "\n";
+        return std::nullopt;
+    }
+    }
+}
+
 bool TelemetryReplay::load(const std::string& filename) {
     std::ifstream inputFile(filename);
 
     if (!inputFile.is_open()) {
         return false;
     }
-    
+
     try {
         records.clear();
         currentIndex = 0;
@@ -53,13 +77,26 @@ bool TelemetryReplay::load(const std::string& filename) {
                 return false;
             }
 
+            // Validate values were returned before using in the TelemetryRecord constructor
+
+            std::optional<double> elapsedTimeValue = parseStrictDouble(elapsedTime);
+            std::optional<double> xValue = parseStrictDouble(x);
+            std::optional<double> yValue = parseStrictDouble(y);
+            std::optional<double> altitudeValue = parseStrictDouble(altitude);
+            std::optional<double> batteryValue = parseStrictDouble(battery);
+
+            if (!elapsedTimeValue || !xValue || !yValue || !altitudeValue || !batteryValue) {
+                records.clear();
+                return false;
+            }
+            
             TelemetryRecord record{
                 static_cast<std::size_t>(std::stoull(frame)),
-                std::stod(elapsedTime),
-                std::stod(x),
-                std::stod(y),
-                std::stod(altitude),
-                std::stod(battery),
+                elapsedTimeValue.value(),
+                xValue.value(),
+                yValue.value(),
+                altitudeValue.value(),
+                batteryValue.value(),
                 vehicleState.value()
             };
             records.push_back(record);
