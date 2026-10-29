@@ -87,6 +87,12 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_frame.csv
 )
 
+add_test(
+    NAME replay-invalid-header
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_header.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

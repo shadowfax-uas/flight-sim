@@ -59,8 +59,12 @@ namespace {
             return std::nullopt;
         }
         try {
-            std::stoull(text);
-            return static_cast<std::size_t>(std::stoull(text));
+            unsigned long long value = std::stoull(text);
+            if (value > std::numeric_limits<std::size_t>::max()) {
+                std::cerr << "Frame value out of range: " << text << "\n";
+                return std::nullopt;
+            }
+            return static_cast<std::size_t>(value);
         }
         catch (const std::invalid_argument& error) {
             std::cerr << "Invalid argument error while parsing frame from value: " << text << "\n";
@@ -80,12 +84,24 @@ bool TelemetryReplay::load(const std::string& filename) {
         return false;
     }
 
+    const std::string expectedHeader = "frame,elapsedTimeSeconds,x,y,altitude,battery,state";
+
     try {
         records.clear();
         currentIndex = 0;
 
         std::string line;
-        std::getline(inputFile, line);
+
+        if (!std::getline(inputFile, line)) {
+            std::cerr << "Failed to read header\n";
+            records.clear();
+            return false;
+        }
+        if (line != expectedHeader) {
+            std::cerr << "Invalid header: " << line << "\n";
+            records.clear();
+            return false;
+        }
 
         while (std::getline(inputFile, line)) {
             std::stringstream lineStream(line);
