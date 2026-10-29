@@ -93,6 +93,18 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_header.csv
 )
 
+add_test(
+    NAME replay-missing-column
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/missing_column.csv
+)
+
+add_test(
+    NAME replay-extra-column
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/extra_column.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

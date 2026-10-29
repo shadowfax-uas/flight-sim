@@ -1,0 +1,2 @@
+frame,elapsedTimeSeconds,x,y,altitude,battery,state,extraColumn
+0,0,0,0,0,100,Grounded,extraValue
