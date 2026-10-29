@@ -105,6 +105,18 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/extra_column.csv
 )
 
+set_tests_properties(
+    replay-missing-column
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: expected 7 columns, found 6"
+)
+
+set_tests_properties(
+    replay-extra-column
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: expected 7 columns, found 8"
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

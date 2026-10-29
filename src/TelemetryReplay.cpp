@@ -103,7 +103,21 @@ bool TelemetryReplay::load(const std::string& filename) {
             return false;
         }
 
+        std::size_t lineNumber = 1;
+
         while (std::getline(inputFile, line)) {
+            ++lineNumber;
+
+            const auto commaCount = std::count(line.begin(), line.end(), ',');
+
+            if (commaCount != 6) {
+                std::cerr << "Line " << lineNumber
+                          << ": expected 7 columns, found "
+                          << (commaCount + 1) << "\n";
+                records.clear();
+                return false;
+            }
+
             std::stringstream lineStream(line);
 
             std::string frame;
