@@ -57,10 +57,22 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_number.csv
 )
 
+set_tests_properties(
+    replay-invalid-number
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid elapsedTimeSeconds value: banana"
+)
+
 add_test(
     NAME replay-invalid-state
     COMMAND flight-invalid-state-tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_state.csv
+)
+
+set_tests_properties(
+    replay-invalid-state
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid state value: Potato"
 )
 
 add_test(
@@ -81,6 +93,12 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/negative_frame.csv
 )
 
+set_tests_properties(
+    replay-negative-frame
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid frame value: -1"
+)
+
 add_test(
     NAME replay-invalid-frame
     COMMAND flight-invalid-state-tests
@@ -99,6 +117,12 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/missing_column.csv
 )
 
+set_tests_properties(
+    replay-missing-column
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: expected 7 columns, found 6"
+)
+
 add_test(
     NAME replay-extra-column
     COMMAND flight-invalid-state-tests
@@ -106,15 +130,57 @@ add_test(
 )
 
 set_tests_properties(
-    replay-missing-column
-    PROPERTIES
-    PASS_REGULAR_EXPRESSION "Line 2: expected 7 columns, found 6"
-)
-
-set_tests_properties(
     replay-extra-column
     PROPERTIES
     PASS_REGULAR_EXPRESSION "Line 2: expected 7 columns, found 8"
+)
+
+add_test(
+    NAME replay-invalid-battery
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_battery.csv
+)
+
+set_tests_properties(
+    replay-invalid-battery
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid battery value: banana"
+)
+
+add_test(
+    NAME replay-invalid-x
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_x.csv
+)
+
+set_tests_properties(
+    replay-invalid-x
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid x value: banana"
+)
+
+add_test(
+    NAME replay-invalid-y
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_y.csv
+)
+
+set_tests_properties(
+    replay-invalid-y
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid y value: banana"
+)
+
+add_test(
+    NAME replay-invalid-altitude
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_altitude.csv
+)
+
+set_tests_properties(
+    replay-invalid-altitude
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: invalid altitude value: banana"
 )
 
 add_executable(flight-replay 

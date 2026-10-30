@@ -1,2 +1,2 @@
-frame,elapsedTime,x,y,altitude,battery,state
+frame,elapsedTimeSeconds,x,y,altitude,battery,state
 0,0,0,0,0,100,Potato

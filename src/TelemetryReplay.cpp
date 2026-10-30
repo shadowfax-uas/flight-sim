@@ -24,17 +24,14 @@ namespace {
             std::size_t characterConsumed = 0;
             double value = std::stod(text, &characterConsumed);
             if (characterConsumed != text.size()) {
-                std::cerr << "Failed to parse double from value: " << text << "\n";
                 return std::nullopt;
             }
             return value;
     }
     catch (const std::invalid_argument& error) {
-        std::cerr << "Invalid argument error while parsing double from value: " << text << "\n";
         return std::nullopt;
     }
     catch (const std::out_of_range& error) {
-        std::cerr << "Out of range error while parsing double from value: " << text << "\n";
         return std::nullopt;
     }
     }
@@ -43,7 +40,6 @@ namespace {
         const std::string& text
     ) {
         if (text.empty()) {
-            std::cerr << "Failed to parse frame from value: " << text << "\n";
             return std::nullopt;
         }
 
@@ -55,23 +51,19 @@ namespace {
             }
         );
         if (!onlyDigits) {
-            std::cerr << "Failed to parse frame from value: " << text << "\n";
             return std::nullopt;
         }
         try {
             unsigned long long value = std::stoull(text);
             if (value > std::numeric_limits<std::size_t>::max()) {
-                std::cerr << "Frame value out of range: " << text << "\n";
                 return std::nullopt;
             }
             return static_cast<std::size_t>(value);
         }
         catch (const std::invalid_argument& error) {
-            std::cerr << "Invalid argument error while parsing frame from value: " << text << "\n";
             return std::nullopt;
         }
         catch (const std::out_of_range& error) {
-            std::cerr << "Out of range error while parsing frame from value: " << text << "\n";
             return std::nullopt;
         }
     }
@@ -136,25 +128,56 @@ bool TelemetryReplay::load(const std::string& filename) {
             std::getline(lineStream, battery, ',');
             std::getline(lineStream, state);
 
+            // Validate values before using in the TelemetryRecord constructor
+
             std::optional<VehicleState> vehicleState = stateFromString(state);
             if (!vehicleState) {
+                std::cerr << "Line " << lineNumber << ": invalid state value: " << state << "\n";
                 records.clear();
                 return false;
             }
 
-            // Validate values before using in the TelemetryRecord constructor
-
             std::optional<std::size_t> parsedFrame = parseStrictFrame(frame);
             if (!parsedFrame) {
+                std::cerr << "Line " << lineNumber << ": invalid frame value: " << frame << "\n";
                 records.clear();
                 return false;
             }
 
             std::optional<double> elapsedTimeValue = parseStrictDouble(elapsedTime);
+            if (!elapsedTimeValue) {
+                std::cerr << "Line " << lineNumber << ": invalid elapsedTimeSeconds value: " << elapsedTime << "\n";
+                records.clear();
+                return false;
+            }
+
             std::optional<double> xValue = parseStrictDouble(x);
+            if (!xValue) {
+                std::cerr << "Line " << lineNumber << ": invalid x value: " << x << "\n";
+                records.clear();
+                return false;
+            }
+
             std::optional<double> yValue = parseStrictDouble(y);
+            if (!yValue) {
+                std::cerr << "Line " << lineNumber << ": invalid y value: " << y << "\n";
+                records.clear();
+                return false;
+            }
+
             std::optional<double> altitudeValue = parseStrictDouble(altitude);
+            if (!altitudeValue) {
+                std::cerr << "Line " << lineNumber << ": invalid altitude value: " << altitude << "\n";
+                records.clear();
+                return false;
+            }
+
             std::optional<double> batteryValue = parseStrictDouble(battery);
+            if (!batteryValue) {
+                std::cerr << "Line " << lineNumber << ": invalid battery value: " << battery << "\n";
+                records.clear();
+                return false;
+            }
 
             if (!elapsedTimeValue || !xValue || !yValue || !altitudeValue || !batteryValue) {
                 records.clear();
