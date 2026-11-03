@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
+#include <cmath>
 
 TelemetryReplay::TelemetryReplay() : currentIndex(0) {}
 
@@ -175,6 +176,11 @@ bool TelemetryReplay::load(const std::string& filename) {
             std::optional<double> batteryValue = parseStrictDouble(battery);
             if (!batteryValue) {
                 std::cerr << "Line " << lineNumber << ": invalid battery value: " << battery << "\n";
+                records.clear();
+                return false;
+            }
+            if (*batteryValue < 0 || *batteryValue > 100) {
+                std::cerr << "Line " << lineNumber << ": battery out of range: " << battery << "\n";
                 records.clear();
                 return false;
             }

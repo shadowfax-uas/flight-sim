@@ -183,6 +183,42 @@ set_tests_properties(
     PASS_REGULAR_EXPRESSION "Line 2: invalid altitude value: banana"
 )
 
+add_test(
+    NAME replay-invalid-battery-range
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_battery_range.csv
+)
+
+set_tests_properties(
+    replay-invalid-battery-range
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: battery out of range: 125"
+)
+
+add_test(
+    NAME replay-negative-battery
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/negative_battery.csv
+)
+
+set_tests_properties(
+    replay-negative-battery
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: battery out of range: -1"
+)
+
+add_test(
+    NAME replay-invalid-nan
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_nan.csv
+)
+
+add_test(
+    NAME replay-invalid-infinity
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_infinity.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )
