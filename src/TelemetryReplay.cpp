@@ -27,6 +27,9 @@ namespace {
             if (characterConsumed != text.size()) {
                 return std::nullopt;
             }
+            if (!std::isfinite(value)) {
+                return std::nullopt;
+            }
             return value;
     }
     catch (const std::invalid_argument& error) {
@@ -102,7 +105,7 @@ bool TelemetryReplay::load(const std::string& filename) {
             ++lineNumber;
 
             const auto commaCount = std::count(line.begin(), line.end(), ',');
-
+            
             if (commaCount != 6) {
                 std::cerr << "Line " << lineNumber
                           << ": expected 7 columns, found "
@@ -150,6 +153,19 @@ bool TelemetryReplay::load(const std::string& filename) {
                 std::cerr << "Line " << lineNumber << ": invalid elapsedTimeSeconds value: " << elapsedTime << "\n";
                 records.clear();
                 return false;
+            }
+            if (*elapsedTimeValue < 0) {
+                std::cerr << "Line " << lineNumber << ": elapsedTimeSeconds cannot be negative: " << elapsedTime << "\n";
+                records.clear();
+                return false;
+            }
+            if (!records.empty()) {
+                const auto& lastRecord = records.back();
+                if (*elapsedTimeValue < lastRecord.elapsedTimeSeconds) {
+                    std::cerr << "Line " << lineNumber << ": elapsedTimeSeconds moved backward: " << elapsedTime << "\n";
+                    records.clear();
+                    return false;
+                }
             }
 
             std::optional<double> xValue = parseStrictDouble(x);

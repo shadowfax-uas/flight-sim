@@ -219,6 +219,36 @@ add_test(
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/invalid_infinity.csv
 )
 
+add_test(
+    NAME replay-negative-elapsed-time
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/negative_elapsed_time.csv
+)
+
+set_tests_properties(
+    replay-negative-elapsed-time
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 2: elapsedTimeSeconds cannot be negative: -0.5"
+)
+
+add_test(
+    NAME replay-backward-time
+    COMMAND flight-invalid-state-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/backward_time.csv
+)
+
+set_tests_properties(
+    replay-backward-time
+    PROPERTIES
+    PASS_REGULAR_EXPRESSION "Line 4: elapsedTimeSeconds moved backward: 0.5"
+)
+
+add_test(
+    NAME replay-duplicate-time
+    COMMAND flight-tests
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/duplicate_time.csv
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

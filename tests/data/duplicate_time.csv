@@ -1,0 +1,4 @@
+frame,elapsedTimeSeconds,x,y,altitude,battery,state
+0,0.0,0,0,0,100,Grounded
+1,1.0,5,0,10,99,Flying
+2,1.0,3,0,20,98,Flying
