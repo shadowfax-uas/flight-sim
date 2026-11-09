@@ -74,6 +74,9 @@ namespace {
 }
 
 bool TelemetryReplay::load(const std::string& filename) {
+    records.clear();
+    currentIndex = 0;
+
     std::ifstream inputFile(filename);
 
     if (!inputFile.is_open()) {
@@ -83,9 +86,6 @@ bool TelemetryReplay::load(const std::string& filename) {
     const std::string expectedHeader = "frame,elapsedTimeSeconds,x,y,altitude,battery,state";
 
     try {
-        records.clear();
-        currentIndex = 0;
-
         std::string line;
 
         if (!std::getline(inputFile, line)) {
@@ -197,11 +197,6 @@ bool TelemetryReplay::load(const std::string& filename) {
             }
             if (*batteryValue < 0 || *batteryValue > 100) {
                 std::cerr << "Line " << lineNumber << ": battery out of range: " << battery << "\n";
-                records.clear();
-                return false;
-            }
-
-            if (!elapsedTimeValue || !xValue || !yValue || !altitudeValue || !batteryValue) {
                 records.clear();
                 return false;
             }

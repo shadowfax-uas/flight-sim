@@ -39,6 +39,18 @@ add_executable(flight-tests
 
 target_link_libraries(flight-tests PRIVATE flight-core)
 
+add_executable(replay-failed-reload
+    tests/reload_tests.cpp
+)
+
+target_link_libraries(replay-failed-reload PRIVATE flight-core)
+
+add_test(
+    NAME replay-failed-reload
+    COMMAND replay-failed-reload
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/valid.csv
+)
+
 add_test(
     NAME replay-valid
     COMMAND flight-tests
