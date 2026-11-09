@@ -1,5 +1,4 @@
-#ifndef TELEMETRY_RECORD_HPP
-#define TELEMETRY_RECORD_HPP
+#pragma once
 
 #include "VehicleState.hpp"
 
@@ -14,5 +13,3 @@ struct TelemetryRecord {
     double batteryLevel;
     VehicleState state;
 };
-
-#endif

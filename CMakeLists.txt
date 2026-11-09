@@ -21,6 +21,7 @@ add_library(flight-core
     src/SimulatedDroneSource.cpp
     src/TelemetrySource.cpp
     src/MockTelemetrySource.cpp
+    src/TelemetryStatistics.cpp
     )
 
 target_include_directories(flight-core PUBLIC include)
@@ -259,6 +260,17 @@ add_test(
     NAME replay-duplicate-time
     COMMAND flight-tests
         ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/duplicate_time.csv
+)
+
+add_executable(statistics-tests
+    tests/statistics_tests.cpp
+)
+
+target_link_libraries(statistics-tests PRIVATE flight-core)
+
+add_test(
+    NAME statistics-tests
+    COMMAND statistics-tests
 )
 
 add_executable(flight-replay 
