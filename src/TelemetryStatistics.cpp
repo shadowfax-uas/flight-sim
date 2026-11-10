@@ -28,3 +28,29 @@ double calculateDistanceTraveled(const std::vector<TelemetryRecord>& records) {
     }
     return totalDistance;
 }
+
+std::optional<double> calculateMaxAltitude(const std::vector<TelemetryRecord>& records) {
+    if (records.empty()) {
+        return std::nullopt;
+    }
+
+    double maxAltitude = records.front().altitude;
+    for (const auto& record : records) {
+        if (record.altitude > maxAltitude) {
+            maxAltitude = record.altitude;
+        }
+    }
+    return maxAltitude;
+}
+
+std::optional<double> calculateBatteryConsumed(const std::vector<TelemetryRecord>& records) {
+    if (records.size() < 1) {
+        return std::nullopt;
+    }
+    if (records.size() == 1) {
+        return 0.0;
+    }
+
+    double batteryConsumed = records.front().batteryLevel - records.back().batteryLevel;
+    return batteryConsumed;
+}

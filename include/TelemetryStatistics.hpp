@@ -15,3 +15,7 @@ double calculateDistanceTraveled(
 std::optional<double> calculateMaxAltitude(
     const std::vector<TelemetryRecord>& records
 );
+
+std::optional<double> calculateBatteryConsumed(
+    const std::vector<TelemetryRecord>& records
+);
