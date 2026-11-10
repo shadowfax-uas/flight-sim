@@ -1,5 +1,4 @@
-#ifndef TELEMETRY_RECORDER_HPP
-#define TELEMETRY_RECORDER_HPP
+#pragma once
 
 #include "TelemetryRecord.hpp"
 
@@ -18,5 +17,3 @@ class TelemetryRecorder {
         bool isOpen() const;
         void record(const TelemetryRecord& record);
 };
-
-#endif

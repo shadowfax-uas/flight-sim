@@ -14,12 +14,6 @@ int main() {
         return 1; // Test failed
     }
     double distance = calculateDistanceTraveled(records);
-    if (distance == 0.0) {
-        return 1; // Test failed
-    }
-    if (records.size() < 2) {
-        return 1; // Test failed
-    }
     if (distance != 9.0) {
         return 1; // Test failed
     }

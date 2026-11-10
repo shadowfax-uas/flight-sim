@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <optional>
 #include "TelemetryRecord.hpp"
 
 double calculateDurationSeconds(
@@ -8,5 +9,9 @@ double calculateDurationSeconds(
 );
 
 double calculateDistanceTraveled(
+    const std::vector<TelemetryRecord>& records
+);
+
+std::optional<double> calculateMaxAltitude(
     const std::vector<TelemetryRecord>& records
 );
