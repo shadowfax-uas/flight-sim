@@ -1,4 +1,5 @@
 #include "TelemetryReplay.hpp"
+#include "NumericParsing.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -18,28 +19,6 @@ std::optional<VehicleState> TelemetryReplay::stateFromString(const std::string& 
 }
 
 namespace {
-    // Validate that the entire string can be converted to a double
-    std::optional<double> parseStrictDouble(
-        const std::string& text
-    ) { try {
-            std::size_t characterConsumed = 0;
-            double value = std::stod(text, &characterConsumed);
-            if (characterConsumed != text.size()) {
-                return std::nullopt;
-            }
-            if (!std::isfinite(value)) {
-                return std::nullopt;
-            }
-            return value;
-    }
-    catch (const std::invalid_argument& error) {
-        return std::nullopt;
-    }
-    catch (const std::out_of_range& error) {
-        return std::nullopt;
-    }
-    }
-
     std::optional<std::size_t> parseStrictFrame(
         const std::string& text
     ) {
@@ -148,7 +127,7 @@ bool TelemetryReplay::load(const std::string& filename) {
                 return false;
             }
 
-            std::optional<double> elapsedTimeValue = parseStrictDouble(elapsedTime);
+            std::optional<double> elapsedTimeValue = parsing::parseStrictDouble(elapsedTime);
             if (!elapsedTimeValue) {
                 std::cerr << "Line " << lineNumber << ": invalid elapsedTimeSeconds value: " << elapsedTime << "\n";
                 records.clear();
@@ -168,28 +147,28 @@ bool TelemetryReplay::load(const std::string& filename) {
                 }
             }
 
-            std::optional<double> xValue = parseStrictDouble(x);
+            std::optional<double> xValue = parsing::parseStrictDouble(x);
             if (!xValue) {
                 std::cerr << "Line " << lineNumber << ": invalid x value: " << x << "\n";
                 records.clear();
                 return false;
             }
 
-            std::optional<double> yValue = parseStrictDouble(y);
+            std::optional<double> yValue = parsing::parseStrictDouble(y);
             if (!yValue) {
                 std::cerr << "Line " << lineNumber << ": invalid y value: " << y << "\n";
                 records.clear();
                 return false;
             }
 
-            std::optional<double> altitudeValue = parseStrictDouble(altitude);
+            std::optional<double> altitudeValue = parsing::parseStrictDouble(altitude);
             if (!altitudeValue) {
                 std::cerr << "Line " << lineNumber << ": invalid altitude value: " << altitude << "\n";
                 records.clear();
                 return false;
             }
 
-            std::optional<double> batteryValue = parseStrictDouble(battery);
+            std::optional<double> batteryValue = parsing::parseStrictDouble(battery);
             if (!batteryValue) {
                 std::cerr << "Line " << lineNumber << ": invalid battery value: " << battery << "\n";
                 records.clear();

@@ -22,6 +22,7 @@ add_library(flight-core
     src/TelemetrySource.cpp
     src/MockTelemetrySource.cpp
     src/TelemetryStatistics.cpp
+    src/NumericParsing.cpp
     )
 
 target_include_directories(flight-core PUBLIC include)
