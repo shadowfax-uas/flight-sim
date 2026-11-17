@@ -217,6 +217,10 @@ const TelemetryRecord& TelemetryReplay::current() const {
     return records.at(currentIndex);
 }
 
+const std::vector<TelemetryRecord>& TelemetryReplay::getRecords() const {
+    return records;
+}
+
 bool TelemetryReplay::next() {
     if (currentIndex + 1 < records.size()) {
         ++currentIndex;

@@ -24,6 +24,8 @@ class TelemetryReplay {
 
         const TelemetryRecord& current() const;
 
+        const std::vector<TelemetryRecord>& getRecords() const;
+
         bool next();
         bool previous();
         bool seek(std::size_t index);
