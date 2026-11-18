@@ -1,6 +1,7 @@
 #include "TelemetryReplay.hpp"
 #include "NumericParsing.hpp"
 #include "TelemetryStatistics.hpp"
+#include "TelemetryPlayback.hpp"
 
 #include <iostream>
 #include <string>
@@ -62,27 +63,13 @@ int main(int argc, char* argv[]) {
     }
 
     std::cout << "Playback speed: " << playbackSpeed << "x\n";
-    
-
-    const double firstTimestamp = replay.current().elapsedTimeSeconds;
-
-    const auto startTime = std::chrono::steady_clock::now();
-
-    do {
-        const auto& record = replay.current();
-
-        double replaySeconds = (record.elapsedTimeSeconds - firstTimestamp) / playbackSpeed;
-
-        auto scheduledTime = startTime + std::chrono::duration<double>(replaySeconds);
-
-        std::this_thread::sleep_until(scheduledTime);
-
+    playTelemetry(records, playbackSpeed, [](const TelemetryRecord& record) {
         std::cout
             << "[t=" << record.elapsedTimeSeconds << "s] "
             << "Frame " << record.frameNumber
             << " | Altitude: " << record.altitude
             << " | Battery: " << record.batteryLevel
             << "%\n" << std::flush;
-    } while (replay.next());
+    });
     return 0;
 }
