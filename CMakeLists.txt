@@ -275,6 +275,17 @@ add_test(
     COMMAND statistics-tests
 )
 
+add_executable(playback-tests
+    tests/playback_tests.cpp
+)
+
+target_link_libraries(playback-tests PRIVATE flight-core)
+
+add_test(
+    NAME playback-tests
+    COMMAND playback-tests
+)
+
 add_executable(flight-replay 
     src/replay_main.cpp
 )

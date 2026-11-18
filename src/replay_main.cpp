@@ -5,9 +5,6 @@
 
 #include <iostream>
 #include <string>
-#include <chrono>
-#include <thread>
-#include <cmath>
 
 int main(int argc, char* argv[]) {
     if (argc < 2 || argc > 3) {
@@ -43,21 +40,21 @@ int main(int argc, char* argv[]) {
     const auto& records = replay.getRecords();
 
     double distance = calculateDistanceTraveled(records);
-    std::cout << "Total distance traveled: " << distance << " meters\n";
+    std::cout << "Total distance traveled: " << distance << " units\n";
 
     double duration = calculateDurationSeconds(records);
     std::cout << "Total duration: " << duration << " seconds\n";
 
     std::optional<double> maxAltitude = calculateMaxAltitude(records);
     if (maxAltitude) {
-        std::cout << "Maximum altitude: " << *maxAltitude << " meters\n";
+        std::cout << "Maximum altitude: " << *maxAltitude << " units\n";
     } else {
         std::cout << "Maximum altitude: N/A\n";
     }
 
     std::optional<double> batteryConsumed = calculateBatteryConsumed(records);
     if (batteryConsumed) {
-        std::cout << "Battery consumed: " << *batteryConsumed << "%\n";
+        std::cout << "Battery consumed: " << *batteryConsumed << " percentage points\n";
     } else {
         std::cout << "Battery consumed: N/A\n";
     }
